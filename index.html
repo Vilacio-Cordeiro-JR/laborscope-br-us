@@ -10,21 +10,19 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Swiper CSS (Carrossel Touch) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         campb: {
-                            blue: '#0284C7',      // Azul institucional principal
-                            darkblue: '#0369A1',  // Azul escuro
-                            navy: '#0F172A',      // Texto principal escuro
-                            light: '#F8FAFC',     // Fundo da página em tom gelo/branco
-                            card: '#FFFFFF',      // Fundo dos cards (Branco puro)
-                            border: '#E2E8F0',    // Bordas suaves
-                            muted: '#64748B'      // Texto secundário
+                            blue: '#0284C7',
+                            darkblue: '#0369A1',
+                            navy: '#0F172A',
+                            light: '#F8FAFC',
+                            card: '#FFFFFF',
+                            border: '#E2E8F0',
+                            muted: '#64748B'
                         }
                     }
                 }
@@ -34,17 +32,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .swiper-pagination-bullet-active { background: #0284C7 !important; }
-        .swiper-pagination-bullet { background: #CBD5E1; }
     </style>
 </head>
 <body class="bg-campb-light text-campb-navy min-h-screen flex flex-col justify-between pb-8">
 
-    <!-- Header Estilo CAMPB -->
+    <!-- Header -->
     <header class="border-b border-campb-border bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <div class="p-2.5 bg-sky-50 text-campb-blue rounded-xl border border-sky-100">
+                <div class="p-2 bg-sky-50 text-campb-blue rounded-xl border border-sky-100">
                     <i data-lucide="scale" class="w-5 h-5"></i>
                 </div>
                 <div>
@@ -53,7 +49,6 @@
                 </div>
             </div>
             
-            <!-- Selector de Moeda/PPA -->
             <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-campb-border text-[11px]">
                 <button id="btn-ppa" onclick="setMode('PPA')" class="px-3 py-1 rounded-lg font-bold transition bg-campb-blue text-white shadow-sm">PPA</button>
                 <button id="btn-nominal" onclick="setMode('NOMINAL')" class="px-3 py-1 rounded-lg font-semibold transition text-campb-muted hover:text-campb-navy">Nominal</button>
@@ -63,134 +58,193 @@
 
     <main class="max-w-7xl mx-auto px-4 py-6 w-full space-y-6">
 
-        <!-- CARROSSEL DE KPIS EM CARD BRANCO -->
-        <section class="swiper kpi-swiper w-full pb-8">
-            <div class="swiper-wrapper">
-                
-                <!-- Slide 1: PIB per Capita -->
-                <div class="swiper-slide bg-campb-card p-4 rounded-2xl border border-campb-border shadow-sm flex flex-col justify-between h-auto">
-                    <div class="flex items-center justify-between text-campb-muted mb-2">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">PIB per Capita</span>
-                        <i data-lucide="globe" class="w-4 h-4 text-campb-blue"></i>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-baseline">
-                            <span class="text-xs text-emerald-600 font-bold">Brasil</span>
-                            <span class="text-base font-extrabold text-campb-navy">US$ 10.410</span>
-                        </div>
-                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-emerald-500 h-full" style="width: 13%"></div>
-                        </div>
-                        <div class="flex justify-between items-baseline pt-1">
-                            <span class="text-xs text-campb-blue font-bold">EUA</span>
-                            <span class="text-base font-extrabold text-campb-navy">US$ 81.630</span>
-                        </div>
-                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-campb-blue h-full" style="width: 100%"></div>
-                        </div>
-                    </div>
-                    <span class="text-[9px] text-campb-muted mt-3 block font-medium">Fonte: Banco Mundial (2024)</span>
+        <!-- CARDS DE KPIS EM GRID RESPONSIVO -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- PIB per Capita -->
+            <div class="bg-campb-card p-4 rounded-2xl border border-campb-border shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-campb-muted mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">PIB per Capita</span>
+                    <i data-lucide="globe" class="w-4 h-4 text-campb-blue"></i>
                 </div>
-
-                <!-- Slide 2: IDH -->
-                <div class="swiper-slide bg-campb-card p-4 rounded-2xl border border-campb-border shadow-sm flex flex-col justify-between h-auto">
-                    <div class="flex items-center justify-between text-campb-muted mb-2">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Índice IDH (ONU)</span>
-                        <i data-lucide="award" class="w-4 h-4 text-sky-500"></i>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-xs text-emerald-600 font-bold">Brasil</span>
+                        <span class="text-base font-extrabold text-campb-navy">US$ 10.410</span>
                     </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-baseline">
-                            <span class="text-xs text-emerald-600 font-bold">Brasil (89º)</span>
-                            <span class="text-base font-extrabold text-campb-navy">0,760 <span class="text-[10px] text-campb-muted font-normal">(Alto)</span></span>
-                        </div>
-                        <div class="flex justify-between items-baseline pt-1">
-                            <span class="text-xs text-campb-blue font-bold">EUA (20º)</span>
-                            <span class="text-base font-extrabold text-campb-navy">0,927 <span class="text-[10px] text-campb-muted font-normal">(M. Alto)</span></span>
-                        </div>
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full" style="width: 13%"></div>
                     </div>
-                    <span class="text-[9px] text-campb-muted mt-3 block font-medium">Fonte: PNUD / ONU (2024)</span>
+                    <div class="flex justify-between items-baseline pt-1">
+                        <span class="text-xs text-campb-blue font-bold">EUA</span>
+                        <span class="text-base font-extrabold text-campb-navy">US$ 81.630</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-campb-blue h-full" style="width: 100%"></div>
+                    </div>
                 </div>
-
-                <!-- Slide 3: Salário Mínimo -->
-                <div class="swiper-slide bg-campb-card p-4 rounded-2xl border border-campb-border shadow-sm flex flex-col justify-between h-auto">
-                    <div class="flex items-center justify-between text-campb-muted mb-2">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Salário Mínimo</span>
-                        <i data-lucide="wallet" class="w-4 h-4 text-emerald-600"></i>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-baseline">
-                            <span class="text-xs text-emerald-600 font-bold">Brasil</span>
-                            <span class="text-base font-extrabold text-campb-navy" id="val-sm-br">US$ 543 PPA</span>
-                        </div>
-                        <div class="flex justify-between items-baseline pt-1">
-                            <span class="text-xs text-campb-blue font-bold">EUA (Fed.)</span>
-                            <span class="text-base font-extrabold text-campb-navy" id="val-sm-us">US$ 1.256 PPA</span>
-                        </div>
-                    </div>
-                    <span class="text-[9px] text-campb-muted mt-3 block font-medium" id="lbl-sm-sub">Poder de Compra Real</span>
-                </div>
-
-                <!-- Slide 4: Informalidade -->
-                <div class="swiper-slide bg-campb-card p-4 rounded-2xl border border-campb-border shadow-sm flex flex-col justify-between h-auto">
-                    <div class="flex items-center justify-between text-campb-muted mb-2">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Informalidade</span>
-                        <i data-lucide="user-x" class="w-4 h-4 text-rose-500"></i>
-                    </div>
-                    <div class="space-y-2">
-                        <div>
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-emerald-600 font-bold">Brasil</span>
-                                <span class="font-bold text-campb-navy">38,6%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-emerald-500 h-full" style="width: 38.6%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-campb-blue font-bold">EUA</span>
-                                <span class="font-bold text-campb-navy">&lt; 6,8%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-campb-blue h-full" style="width: 6.8%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <span class="text-[9px] text-campb-muted mt-3 block font-medium">Fonte: IBGE / OIT</span>
-                </div>
-
+                <span class="text-[9px] text-campb-muted mt-3 block font-medium">Fonte: Banco Mundial (2024)</span>
             </div>
-            <div class="swiper-pagination"></div>
+
+            <!-- IDH -->
+            <div class="bg-campb-card p-4 rounded-2xl border border-campb-border shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-campb-muted mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Índice IDH (ONU)</span>
+                    <i data-lucide="award" class="w-4 h-4 text-sky-500"></i>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-xs text-emerald-600 font-bold">Brasil (89º)</span>
+                        <span class="text-base font-extrabold text-campb-navy">0,760 <span class="text-[10px] text-campb-muted font-normal">(Alto)</span></span>
+                    </div>
+                    <div class="flex justify-between items-baseline pt-1">
+                        <span class="text-xs text-campb-blue font-bold">EUA (20º)</span>
+                        <span class="text-base font-extrabold text-campb-navy">0,927 <span class="text-[10px] text-campb-muted font-normal">(M. Alto)</span></span>
+                    </div>
+                </div>
+                <span class="text-[9px] text-campb-muted mt-3 block font-medium">Fonte: PNUD / ONU (2024)</span>
+            </div>
+
+            <!-- Salário Mínimo -->
+            <div class="bg-campb-card p-4 rounded-2xl border border-campb-border shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-campb-muted mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Salário Mínimo</span>
+                    <i data-lucide="wallet" class="w-4 h-4 text-emerald-600"></i>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-xs text-emerald-600 font-bold">Brasil</span>
+                        <span class="text-base font-extrabold text-campb-navy" id="val-sm-br">US$ 543 PPA</span>
+                    </div>
+                    <div class="flex justify-between items-baseline pt-1">
+                        <span class="text-xs text-campb-blue font-bold">EUA (Fed.)</span>
+                        <span class="text-base font-extrabold text-campb-navy" id="val-sm-us">US$ 1.256 PPA</span>
+                    </div>
+                </div>
+                <span class="text-[9px] text-campb-muted mt-3 block font-medium" id="lbl-sm-sub">Poder de Compra Real</span>
+            </div>
+
+            <!-- Informalidade -->
+            <div class="bg-campb-card p-4 rounded-2xl border border-campb-border shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-campb-muted mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Informalidade</span>
+                    <i data-lucide="user-x" class="w-4 h-4 text-rose-500"></i>
+                </div>
+                <div class="space-y-2">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-emerald-600 font-bold">Brasil</span>
+                            <span class="font-bold text-campb-navy">38,6%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full" style="width: 38.6%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-campb-blue font-bold">EUA</span>
+                            <span class="font-bold text-campb-navy">&lt; 6,8%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-campb-blue h-full" style="width: 6.8%"></div>
+                        </div>
+                    </div>
+                </div>
+                <span class="text-[9px] text-campb-muted mt-3 block font-medium">Fonte: IBGE / OIT</span>
+            </div>
+
         </section>
 
-        <!-- GRÁFICO TEMA CAMPB (BRANCO E AZUL) -->
+        <!-- GRÁFICO CORRIGIDO (CANVAS COM ALTURA EXPLICITA) -->
         <section class="bg-campb-card p-4 sm:p-6 rounded-2xl border border-campb-border shadow-sm space-y-3">
             <div class="flex items-center justify-between">
                 <h2 class="text-sm font-bold text-campb-navy flex items-center gap-2">
                     <i data-lucide="bar-chart-2" class="w-4 h-4 text-campb-blue"></i>
-                    Comparativo Visual: Renda x Tributação
+                    Comparativo Visual: Renda Mensal vs. Impostos
                 </h2>
             </div>
-            <div class="w-full h-60 sm:h-72 relative">
+            <div style="position: relative; height: 260px; width: 100%;">
                 <canvas id="chart-ppa"></canvas>
             </div>
         </section>
 
-        <!-- SIMULADOR DE PERSONA -->
+        <!-- NOVO CAMPO: ANÁLISE TRIBUTÁRIA DETALHADA (TAX WEDGE) -->
+        <section class="bg-campb-card p-4 sm:p-6 rounded-2xl border border-campb-border shadow-sm space-y-4">
+            <h2 class="text-sm font-bold text-campb-navy flex items-center gap-2">
+                <i data-lucide="receipt" class="w-4 h-4 text-amber-500"></i>
+                Estrutura Tributária e Descontos no Salário (Tax Wedge)
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <!-- Brasil -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                        <span class="font-extrabold text-emerald-600">Brasil (CLT)</span>
+                        <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md">Retenção: 33,5% - 41,8%</span>
+                    </div>
+                    <ul class="space-y-2 text-campb-navy">
+                        <li class="flex justify-between">
+                            <span>INSS (Previdência):</span>
+                            <span class="font-semibold">7,5% a 14% (Progressivo)</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>IRRF (Imposto de Renda):</span>
+                            <span class="font-semibold">Até 27,5%</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>FGTS (Custo Patronal):</span>
+                            <span class="font-semibold">8% do Salário Bruto</span>
+                        </li>
+                    </ul>
+                    <p class="text-[10px] text-campb-muted pt-1 border-t border-slate-200">
+                        *O empregador brasileiro paga cerca de 68% a 180% de encargos adicionais sobre o valor do salário bruto.
+                    </p>
+                </div>
+
+                <!-- Estados Unidos -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                        <span class="font-extrabold text-campb-blue">Estados Unidos (W-2)</span>
+                        <span class="text-xs bg-sky-100 text-campb-darkblue font-bold px-2 py-0.5 rounded-md">Retenção: 28,2% - 31,8%</span>
+                    </div>
+                    <ul class="space-y-2 text-campb-navy">
+                        <li class="flex justify-between">
+                            <span>Social Security + Medicare:</span>
+                            <span class="font-semibold">7,65% (FICA Tax)</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Federal Income Tax:</span>
+                            <span class="font-semibold">10% a 37%</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>State Income Tax:</span>
+                            <span class="font-semibold">0% (Texas/FL) a 13,3% (CA)</span>
+                        </li>
+                    </ul>
+                    <p class="text-[10px] text-campb-muted pt-1 border-t border-slate-200">
+                        *Nos EUA não há FGTS ou multa de demissão. O imposto varia conforme a localidade (State Tax).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIMULADOR COMPLETO DAS 3 PERSONAS -->
         <section class="bg-campb-card p-4 sm:p-6 rounded-2xl border border-campb-border shadow-sm space-y-4">
             <h2 class="text-sm font-bold text-campb-navy flex items-center gap-2">
                 <i data-lucide="users" class="w-4 h-4 text-campb-blue"></i>
-                Trajetórias de Carreira por Persona
+                Trajetórias de Carreira por Persona (Detalhadas)
             </h2>
             
+            <!-- Botões Seletor de Persona -->
             <div class="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl text-xs">
-                <button onclick="setPersona('operario')" id="p-operario" class="py-1.5 px-2 font-bold rounded-lg text-white transition bg-campb-blue shadow-sm">Operário</button>
-                <button onclick="setPersona('corporativo')" id="p-corporativo" class="py-1.5 px-2 font-semibold rounded-lg text-campb-muted transition">Privado</button>
-                <button onclick="setPersona('publico')" id="p-publico" class="py-1.5 px-2 font-semibold rounded-lg text-campb-muted transition">Público</button>
+                <button onclick="setPersona('operario')" id="p-operario" class="py-2 px-2 font-bold rounded-lg text-white transition bg-campb-blue shadow-sm">Operário</button>
+                <button onclick="setPersona('corporativo')" id="p-corporativo" class="py-2 px-2 font-semibold rounded-lg text-campb-muted transition">Privado (Corp)</button>
+                <button onclick="setPersona('publico')" id="p-publico" class="py-2 px-2 font-semibold rounded-lg text-campb-muted transition">Público</button>
             </div>
 
-            <div id="persona-content" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                <!-- Conteúdo Injetado via JS -->
+            <!-- Conteúdo Dinâmico das Personas -->
+            <div id="persona-content" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <!-- Injetado pelo JS -->
             </div>
         </section>
 
@@ -267,56 +321,89 @@
         <p>LaborScope © 2026 — Análise comparativa socioeconômica internacional.</p>
     </footer>
 
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
+    <!-- Scripts da Aplicação -->
     <script>
+        // Inicializa ícones
         lucide.createIcons();
-
-        // Inicializar Swiper
-        const swiper = new Swiper('.kpi-swiper', {
-            slidesPerView: 1.2,
-            spaceBetween: 12,
-            pagination: { el: '.swiper-pagination', clickable: true },
-            breakpoints: {
-                640: { slidesPerView: 2.2 },
-                1024: { slidesPerView: 4, spaceBetween: 16 }
-            }
-        });
 
         let currentMode = 'PPA';
         let chartInstance = null;
 
+        // Dados Detalhados das 3 Personas
         const personasInfo = {
             operario: `
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <strong class="text-emerald-600 block font-bold">Brasil (Operário)</strong>
-                    <p class="text-campb-muted">Baixa mobilidade social, salário próximo ao mínimo nominal e alta exposição à informalidade (38,6%). Dependente de serviços públicos.</p>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <strong class="text-emerald-600 font-bold text-sm">Brasil (Operário / Chão de Fábrica)</strong>
+                        <span class="text-[10px] bg-slate-200 text-slate-700 font-bold px-2 py-0.-bold px-2 py-0.
+                                            </div>
+                    <ul class="space-y-1.5 text-campb-muted">
+                        <li>• <strong>Piso Médio:</strong> R$ 1.500 a R$ 2.400 / mês.</li>
+                        <li>• <strong>Progressão de Carreira:</strong> Lenta. Depende de tempo de casa e cursos técnicos (Senai).</li>
+                        <li>• <strong>Teto Salarial da Categoria:</strong> ~R$ 4.500 / mês (Operador Especializado/Líder).</li>
+                        <li>• <strong>Risco de Informalidade:</strong> Elevado (38,6% da base trabalha sem registro CLT).</li>
+                    </ul>
                 </div>
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <strong class="text-campb-blue block font-bold">Estados Unidos (Operário)</strong>
-                    <p class="text-campb-muted">Elevado poder de compra de bens (veículos/eletrônicos). Trabalho essencial bem remunerado por hora, mas sem estabilidade legal de férias.</p>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <strong class="text-campb-blue font-bold text-sm">EUA (Blue-Collar Worker)</strong>
+                        <span class="text-[10px] bg-sky-100 text-campb-darkblue font-bold px-2 py-0.5 rounded">Pagamento por Hora</span>
+                    </div>
+                    <ul class="space-y-1.5 text-campb-muted">
+                        <li>• <strong>Ganho Médio:</strong> US$ 18,00 a US$ 32,00 / hora (~US$ 3.000 a US$ 5.200/mês).</li>
+                        <li>• <strong>Progressão de Carreira:</strong> Alta. Demanda massiva na construção civil, logística e eletricistas.</li>
+                        <li>• <strong>Poder de Compra:</strong> Elevado para bens materiais (veículos, eletroeletrônicos).</li>
+                        <li>• <strong>Desvantagem:</strong> Ausência de férias pagas obrigatórias por lei e risco de demissão instantânea.</li>
+                    </ul>
                 </div>
             `,
             corporativo: `
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <strong class="text-emerald-600 block font-bold">Brasil (Privado)</strong>
-                    <p class="text-campb-muted">Pacotes de benefícios indiretos (VR, VA, Plano de Saúde, PLR) para compensar retenção de IRRF e alíquotas na fonte.</p>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <strong class="text-emerald-600 font-bold text-sm">Brasil (Corporativo em Multinacionais)</strong>
+                        <span class="text-[10px] bg-slate-200 text-slate-700 font-bold px-2 py-0.5 rounded">CLT Executivo</span>
+                    </div>
+                    <ul class="space-y-1.5 text-campb-muted">
+                        <li>• <strong>Remuneração:</strong> Salário base + Pacote de Benefícios (Plano de Saúde Top, VR/VA, PLR semestral).</li>
+                        <li>• <strong>Avanço de Carreira:</strong> Estruturado via trainees e cargos analista ➔ especialista ➔ gerência.</li>
+                        <li>• <strong>Proteção:</strong> 30 dias de férias obrigatórias, 13º salário e segurança do FGTS.</li>
+                    </ul>
                 </div>
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <strong class="text-campb-blue block font-bold">Estados Unidos (Privado)</strong>
-                    <p class="text-campb-muted">Aceleração via Stock Options e mérito por KPIs. Altíssima renda, mas alta rotatividade contratual (At-Will).</p>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <strong class="text-campb-blue font-bold text-sm">EUA (White-Collar / Big Techs & Corp)</strong>
+                        <span class="text-[10px] bg-sky-100 text-campb-darkblue font-bold px-2 py-0.5 rounded">Base + Stock Options</span>
+                    </div>
+                    <ul class="space-y-1.5 text-campb-muted">
+                        <li>• <strong>Remuneração:</strong> Salário anual (~US$ 80k a US$ 250k+) + RSUs (Ações da empresa) + Bônus.</li>
+                        <li>• <strong>Meritocracia:</strong> Progressão rápida baseada estritamente no atingimento de KPIs.</li>
+                        <li>• <strong>Risco:</strong> Layoffs frequentes sem estabilidade legal ou indenizações compulsórias.</li>
+                    </ul>
                 </div>
             `,
             publico: `
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <strong class="text-emerald-600 block font-bold">Brasil (Servidor Público)</strong>
-                    <p class="text-campb-muted">Extremamente cobiçado por conta da estabilidade constitucional, aposentadoria diferenciada e remuneração inicial alta.</p>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <strong class="text-emerald-600 font-bold text-sm">Brasil (Servidor Público Concursado)</strong>
+                        <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Estabilidade Constitucional</span>
+                    </div>
+                    <ul class="space-y-1.5 text-campb-muted">
+                        <li>• <strong>Ingresso:</strong> Concurso público competitivo.</li>
+                        <li>• <strong>Vantagens:</strong> Estabilidade (não pode ser demitido sem processo formal), salários iniciais elevados.</li>
+                        <li>• <strong>Teto:</strong> Teto do funcionalismo público (vinculado aos ministros do STF).</li>
+                    </ul>
                 </div>
-                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                    <strong class="text-campb-blue block font-bold">Estados Unidos (Servidor Público)</strong>
-                    <p class="text-campb-muted">Carreira estável com bons planos de aposentadoria (401k/Pension), mas salários frequentemente abaixo do topo privado.</p>
-                </div>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <strong class="text-campb-blue font-bold text-sm">EUA (Public / Government Employee)</strong>
+                        <span class="text-[10px] bg-sky-100 text-campb-darkblue font-bold px-2 py-0.5 rounded">Plano 401(k) / Pension</span>
+                    </div>
+                    <ul class="space-y-1.5 text-campb-muted">
+                        <li>• <strong>Ingresso:</strong> Processo seletivo de mercado (currículo/entrevista).</li>
+                        <li>• <strong>Atratividade:</strong> Boa segurança relativa e plano de aposentadoria (Pension), mas sem estabilidade total.</li>
+                        <li>• <strong>Comparativo:</strong> Ganha significativamente menos do que o setor privado equivalente.</li>
+                    </ul>
+                    </div>
             `
         };
 
@@ -326,4 +413,81 @@
             const btnNominal = document.getElementById('btn-nominal');
 
             if (mode === 'PPA') {
+                btnPPA.className = 'px-3 py-1 rounded-lg font-bold transition bg-campb-blue text-white shadow-sm';
+                btnNominal.className = 'px-3 py-1 rounded-lg font-semibold transition text-campb-muted hover:text-campb-navy';
+                document.getElementById('val-sm-br').innerText = 'US$ 543 PPA';
+                document.getElementById('val-sm-us').innerText = 'US$ 1.256 PPA';
+                document.getElementById('lbl-sm-sub').innerText = 'Poder de Compra Real';
+            } else {
+                btnNominal.className = 'px-3 py-1 rounded-lg font-bold transition bg-campb-blue text-white shadow-sm';
+                btnPPA.className = 'px-3 py-1 rounded-lg font-semibold transition text-campb-muted hover:text-campb-navy';
+                document.getElementById('val-sm-br').innerText = 'US$ 259 Nominal';
+                document.getElementById('val-sm-us').innerText = 'US$ 1.256 Nominal';
+                document.getElementById('lbl-sm-sub').innerText = 'Conversão Câmbio Oficial';
+            }
+            updateChart();
+        }
+
+        function setPersona(persona) {
+            ['operario', 'corporativo', 'publico'].forEach(p => {
+                const btn = document.getElementById(`p-${p}`);
+                if (p === persona) {
+                    btn.className = 'py-2 px-2 font-bold rounded-lg text-white transition bg-campb-blue shadow-sm';
+                } else {
+                    btn.className = 'py-2 px-2 font-semibold rounded-lg text-campb-muted transition hover:text-campb-navy';
+                }
+            });
+            document.getElementById('persona-content').innerHTML = personasInfo[persona];
+        }
+
+        function initChart() {
+            const canvas = document.getElementById('chart-ppa');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
             
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Brasil', 'Estados Unidos'],
+                    datasets: [
+                        {
+                            label: 'Salário Mínimo Ajustado (USD)',
+                            data: [543, 1256],
+                            backgroundColor: '#10B981',
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Impostos no Trabalho (%)',
+                            data: [37.6, 30.0],
+                            backgroundColor: '#0284C7',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#475569', font: { size: 11, weight: 'bold' } } }
+                    },
+                    scales: {
+                        y: { grid: { color: '#E2E8F0' }, ticks: { color: '#64748B', font: { size: 10 } } },
+                        x: { grid: { display: false }, ticks: { color: '#0F172A', font: { size: 11, weight: 'bold' } } }
+                    }
+                }
+            });
+        }
+
+        function updateChart() {
+            if (!chartInstance) return;
+            chartInstance.data.datasets[0].data = currentMode === 'PPA' ? [543, 1256] : [259, 1256];
+            chartInstance.update();
+        }
+
+        window.onload = () => {
+            initChart();
+            setPersona('operario');
+        };
+    </script>
+</body>
+</html>
