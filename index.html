@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparativo Trabalhista: Brasil vs. Estados Unidos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            br: '#10B981', // Verde Brasil
+                            us: '#3B82F6', // Azul EUA
+                            dark: '#0F172A',
+                            card: '#1E293B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-brand-dark text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-blue-600/20 text-blue-400 rounded-lg">
+                    <i data-lucide="scale"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">LaborScope</h1>
+                    <p class="text-xs text-slate-400">Análise Comparativa: Brasil x Estados Unidos</p>
+                </div>
+            </div>
+            
+            <!-- Controles Globais -->
+            <div class="flex items-center gap-3 bg-slate-800 p-1.5 rounded-xl border border-slate-700 text-xs">
+                <button id="btn-ppa" onclick="setMode('PPA')" class="px-3 py-1.5 rounded-lg font-medium transition bg-blue-600 text-white">
+                    PPA (Poder de Compra)
+                </button>
+                <button id="btn-nominal" onclick="setMode('NOMINAL')" class="px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-white">
+                    Nominal (USD)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
+
+        <!-- KPI Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- Card 1: PIB per Capita -->
+            <div class="bg-brand-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <span class="text-xs font-semibold uppercase tracking-wider">PIB per Capita</span>
+                    <i data-lucide="globe" class="w-4 h-4"></i>
+                </div>
+                <div class="space-y-2 mt-2">
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-xs text-emerald-400 font-medium">Brasil</span>
+                        <span class="text-lg font-bold text-slate-100" id="val-pib-br">US$ 10.410</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full" style="width: 13%"></div>
+                    </div>
+                    <div class="flex justify-between items-baseline pt-1">
+                        <span class="text-xs text-blue-400 font-medium">EUA</span>
+                        <span class="text-lg font-bold text-slate-100" id="val-pib-us">US$ 81.630</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-blue-500 h-full" style="width: 100%"></div>
+                    </div>
+                </div>
+                <span class="text-[10px] text-slate-500 mt-3 block">Fonte: Banco Mundial (2024)</span>
+            </div>
+
+            <!-- Card 2: Salário Mínimo -->
+            <div class="bg-brand-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <span class="text-xs font-semibold uppercase tracking-wider">Salário Mínimo (Mês)</span>
+                    <i data-lucide="wallet" class="w-4 h-4"></i>
+                </div>
+                <div class="space-y-2 mt-2">
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-xs text-emerald-400 font-medium">Brasil</span>
+                        <span class="text-lg font-bold text-slate-100" id="val-sm-br">US$ 543 PPA</span>
+                    </div>
+                    <div class="flex justify-between items-baseline pt-1">
+                        <span class="text-xs text-blue-400 font-medium">EUA (Federal)</span>
+                        <span class="text-lg font-bold text-slate-100" id="val-sm-us">US$ 1.256 PPA</span>
+                    </div>
+                </div>
+                <span class="text-[10px] text-slate-500 mt-3 block" id="lbl-sm-sub">Ajustado por Paridade de Poder de Compra</span>
+            </div>
+
+            <!-- Card 3: Informalidade -->
+            <div class="bg-brand-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <span class="text-xs font-semibold uppercase tracking-wider">Informalidade</span>
+                    <i data-lucide="user-x" class="w-4 h-4"></i>
+                </div>
+                <div class="space-y-3 mt-1">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-emerald-400">Brasil</span>
+                            <span class="font-bold text-slate-200">38,6%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full" style="width: 38.6%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-blue-400">EUA</span>
+                            <span class="font-bold text-slate-200">&lt; 6,8%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                            <div class="bg-blue-500 h-full" style="width: 6.8%"></div>
+                        </div>
+                    </div>
+                </div>
+                <span class="text-[10px] text-slate-500 mt-3 block">Fonte: IBGE / OIT (ILOSTAT)</span>
+            </div>
+
+            <!-- Card 4: Férias Pagas por Lei -->
+            <div class="bg-brand-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <span class="text-xs font-semibold uppercase tracking-wider">Férias Obrigatórias</span>
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                </div>
+                <div class="grid grid-cols-2 gap-2 my-auto text-center">
+                    <div class="bg-slate-800/60 p-2.5 rounded-xl border border-emerald-500/20">
+                        <span class="block text-2xl font-black text-emerald-400">30d</span>
+                        <span class="text-[10px] text-slate-400">Brasil (CF/88)</span>
+                    </div>
+                    <div class="bg-slate-800/60 p-2.5 rounded-xl border border-blue-500/20">
+                        <span class="block text-2xl font-black text-blue-400">0d</span>
+                        <span class="text-[10px] text-slate-400">EUA (FLSA)</span>
+                    </div>
+                </div>
+                <span class="text-[10px] text-slate-500 mt-1 block">EUA confia na negociação via benefício (PTO).</span>
+            </div>
+
+        </section>
+
+        <!-- Seção de Gráfico e Filtro de Persona -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Gráfico Comparativo -->
+            <div class="lg:col-span-2 bg-brand-card p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-blue-400"></i>
+                        Poder de Compra Real vs. Encargos Tributários
+                    </h2>
+                </div>
+                <div class="relative w-full h-64 md:h-80">
+                    <canvas id="chart-ppa"></canvas>
+                </div>
+            </div>
+
+            <!-- Painel de Personas -->
+            <div class="bg-brand-card p-6 rounded-2xl border border-slate-800 flex flex-col">
+                <h2 class="text-base font-bold text-slate-100 mb-4 flex items-center gap-2">
+                    <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
+                    Simulador por Persona
+                </h2>
+                
+                <div class="grid grid-cols-3 gap-2 mb-4 bg-slate-800 p-1 rounded-xl">
+                    <button onclick="setPersona('operario')" id="p-operario" class="py-1.5 px-2 text-xs font-medium rounded-lg text-slate-300 transition bg-blue-600 text-white">Operário</button>
+                    <button onclick="setPersona('corporativo')" id="p-corporativo" class="py-1.5 px-2 text-xs font-medium rounded-lg text-slate-400 transition hover:text-white">Privado</button>
+                    <button onclick="setPersona('publico')" id="p-publico" class="py-1.5 px-2 text-xs font-medium rounded-lg text-slate-400 transition hover:text-white">Público</button>
+                </div>
+
+                <div id="persona-content" class="text-xs space-y-3 flex-grow flex flex-col justify-center text-slate-300">
+                    <!-- Conteúdo dinâmico via JS -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Tabela Matriz de Comparação -->
+        <section class="bg-brand-card rounded-2xl border border-slate-800 overflow-hidden">
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
+                    <i data-lucide="table" class="w-4 h-4 text-purple-400"></i>
+                    Matriz de Cruzamento Direto
+                </h2>
+                <span class="text-xs text-slate-400">Dados consolidados de 2024/2025</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-800/80 uppercase text-[10px] text-slate-400 font-semibold tracking-wider">
+                        <tr>
+                            <th class="px-6 py-4">Parâmetro</th>
+                            <th class="px-6 py-4 text-emerald-400">Brasil</th>
+                            <th class="px-6 py-4 text-blue-400">Estados Unidos</th>
+                            <th class="px-6 py-4">Impacto Cruzado / Delta</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="px-6 py-4 font-semibold text-slate-100">Modelo de Demissão</td>
+                            <td class="px-6 py-4">Protegido (CLT / FGTS / Multa 40%)</td>
+                            <td class="px-6 py-4">Employment-at-Will (Livre)</td>
+                            <td class="px-6 py-4 text-slate-400">EUA permite demissão sem custo; BR penaliza demissão sem justa causa.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="px-6 py-4 font-semibold text-slate-100">Assistência Médica</td>
+                            <td class="px-6 py-4">SUS Universal + Medicina Privada</td>
+                            <td class="px-6 py-4">54% via Empregador (Insurance)</td>
+                            <td class="px-6 py-4 text-slate-400">Nos EUA, o desemprego encerra imediatamente a cobertura médica básica.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="px-6 py-4 font-semibold text-slate-100">Impostos no Trabalho</td>
+                            <td class="px-6 py-4">33,5% - 41,8% (Tax Wedge)</td>
+                            <td class="px-6 py-4">28,2% - 31,8% (Tax Wedge)</td>
+                            <td class="px-6 py-4 text-slate-400">O trabalhador brasileiro retém menos do salário bruto gerado.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="px-6 py-4 font-semibold text-slate-100">Cultura de Jornada</td>
+                            <td class="px-6 py-4">44h Semanais Legais</td>
+                            <td class="px-6 py-4">40h Semanais (Foco em KPIs)</td>
+                            <td class="px-6 py-4 text-slate-400">EUA apresenta maior produtividade por hora e cultura workaholic.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Bibliografia -->
+        <section class="bg-slate-900/40 p-6 rounded-2xl border border-slate-800/60 text-xs text-slate-400 space-y-2">
+            <h3 class="font-bold text-slate-200 text-sm mb-2 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i> Fontes Oficiais & Referências Técnicas
+            </h3>
+            <p>• <strong>BANCO MUNDIAL:</strong> World Development Indicators (GDP per capita current US$, 2024).</p>
+            <p>• <strong>IBGE:</strong> Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua 2024/2025).</p>
+            <p>• <strong>U.S. BUREAU OF LABOR STATISTICS (BLS):</strong> Employment Situation Summary (2024/2025).</p>
+            <p>• <strong>OCDE:</strong> Taxing Wages Report 2024 - Alíquotas e Tax Wedge de países membros e parceiros.</p>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+        <p>LaborScope © 2026 — Desenvolvido para análise comparativa de dados econômicos internacionais.</p>
+    </footer>
+
+    <!-- Lógica JavaScript -->
+    <script>
+        // Inicializa Ícones Lucide
+        lucide.createIcons();
+
+        // Estado Global
+        let currentMode = 'PPA';
+        let currentPersona = 'operario';
+        let chartInstance = null;
+
+        // Dados
+        const dataPPA = {
+            smBR: 'US$ 543 PPA',
+            smUS: 'US$ 1.256 PPA',
+            lblSub: 'Ajustado por Paridade de Poder de Compra',
+            chartBR: [543, 33.5],
+            chartUS: [1256, 28.2]
+        };
+
+        const dataNominal = {
+            smBR: 'US$ 259 Nominal',
+            smUS: 'US$ 1.256 Nominal',
+            lblSub: 'Convertido pela Taxa de Câmbio Oficial (1 USD = 5.45 BRL)',
+            chartBR: [259, 33.5],
+            chartUS: [1256, 28.2]
+        };
+
+        const personasInfo = {
+            operario: `
+                <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50 space-y-2">
+                    <strong class="text-emerald-400 block text-sm">Brasil (Operário)</strong>
+                    <p>Baixa mobilidade social, pisos salariais próximos ao mínimo e alta vulnerabilidade ao mercado informal (38,6%). Dependente do SUS e transporte público.</p>
+                </div>
+                <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50 space-y-2">
+                    <strong class="text-blue-400 block text-sm">Estados Unidos (Operário)</strong>
+                    <p>Alto poder de compra de bens de consumo (eletrônicos, veículos). Trabalho por hora bem remunerado em logística e construção, porém sem garantias legais de férias.</p>
+                </div>
+            `,
+            corporativo: `
+                <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50 space-y-2">
+                    <strong class="text-emerald-400 block text-sm">Brasil (Corporativo Privado)</strong>
+                    <p>Forte pacote de benefícios indiretos (VR, VA, Plano de Saúde, PLR) para compensar a renda líquida corroída pela tabela progressiva do IRRF.</p>
+                </div>
+                <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50 space-y-2">
+                    <strong class="text-blue-400 block text-sm">Estados Unidos (Corporativo Privado)</strong>
+                    <p>Foco total em performance e Stock Options (RSUs). Rápida ascensão financeira, mas sujeição ao regime Employment-at-Will (demissão imediata).</p>
+                </div>
+            `,
+            publico: `
+                <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50 space-y-2">
+                    <strong class="text-emerald-400 block text-sm">Brasil (Servidor Público)</strong>
+                    <p>Alta atratividade devido à estabilidade constitucional, aposentadoria diferenciada e remuneração inicial acima da média privada nacional.</p>
+                </div>
+                <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50 space-y-2">
+                    <strong class="text-blue-400 block text-sm">Estados Unidos (Servidor Público)</strong>
+                    <p>Carreira estável e com bons benefícios (Pension/401k), porém os salários no setor público são frequentemente inferiores ao topo do setor privado.</p>
+                </div>
+            `
+        };
+
+        // Alternar Modo (PPA vs NOMINAL)
+        function setMode(mode) {
+            currentMode = mode;
+            const btnPPA = document.getElementById('btn-ppa');
+            const btnNominal = document.getElementById('btn-nominal');
+
+            if (mode === 'PPA') {
+                btnPPA.className = 'px-3 py-1.5 rounded-lg font-medium transition bg-blue-600 text-white';
+                btnNominal.className = 'px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-white';
+                document.getElementById('val-sm-br').innerText = dataPPA.smBR;
+                document.getElementById('val-sm-us').innerText = dataPPA.smUS;
+                document.getElementById('lbl-sm-sub').innerText = dataPPA.lblSub;
+            } else {
+                btnNominal.className = 'px-3 py-1.5 rounded-lg font-medium transition bg-blue-600 text-white';
+                btnPPA.className = 'px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-white';
+                document.getElementById('val-sm-br').innerText = dataNominal.smBR;
+                document.getElementById('val-sm-us').innerText = dataNominal.smUS;
+                document.getElementById('lbl-sm-sub').innerText = dataNominal.lblSub;
+            }
+            updateChart();
+        }
+
+        // Alternar Personas
+        function setPersona(persona) {
+            currentPersona = persona;
+            ['operario', 'corporativo', 'publico'].forEach(p => {
+                const btn = document.getElementById(
